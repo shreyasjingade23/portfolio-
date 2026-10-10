@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const db = require("./config/db");
 require("dotenv").config();
 
 const pool = require("./config/db");
@@ -24,19 +25,19 @@ app.get("/api/test", (req, res) => {
 // Test the MariaDB connection
 app.get("/api/db-test", async (req, res) => {
   try {
-    const [rows] = await pool.query("SELECT DATABASE() AS databaseName");
+    const [rows] = await db.query("SELECT DATABASE() AS databaseName");
 
     res.json({
       success: true,
-      message: "MariaDB connected successfully!",
+      message: "Database connected successfully",
       database: rows[0].databaseName,
     });
   } catch (error) {
-    console.error("Database connection failed:", error.message);
+    console.error("Database connection error:", error);
 
     res.status(500).json({
       success: false,
-      message: "Database connection failed. Check your backend configuration.",
+      message: "Database connection failed. Check the backend terminal.",
     });
   }
 });
